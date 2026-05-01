@@ -41,7 +41,7 @@ public class AttackPerpetrator implements Wrapper {
         LivingEntity target;
         Angle angle;
         float maximumRange;
-        boolean onlyCritical, shouldBreakShield, shouldUnPressShield, useDynamicCooldown, eatAndAttack;
+        boolean onlyCritical, shouldBreakShield, shouldUnPressShield, useDynamicCooldown, eatAndAttack, syncTps, syncPing, kbCritical;
         Box box;
         ModeSetting aimMode;
 
@@ -54,6 +54,9 @@ public class AttackPerpetrator implements Wrapper {
             this.shouldUnPressShield = options.contains("UnPress Shield");
             this.useDynamicCooldown = options.contains("Dynamic Cooldown");
             this.eatAndAttack = options.contains("No Attack When Eat");
+            this.syncTps = options.contains("Sync TPS");
+            this.syncPing = options.contains("Sync Ping");
+            this.kbCritical = options.contains("KB Critical");
             this.box = box;
             this.aimMode = aimMode;
         }

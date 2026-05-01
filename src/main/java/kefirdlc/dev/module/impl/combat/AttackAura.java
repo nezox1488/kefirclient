@@ -51,7 +51,10 @@ public class AttackAura  extends Function {
             new BooleanSetting("Break Shield", true),
             new BooleanSetting("UnPress Shield", true),
             new BooleanSetting("No Attack When Eat", true),
-            new BooleanSetting("Ignore The Walls", false));
+            new BooleanSetting("Ignore The Walls", false),
+            new BooleanSetting("Sync TPS", true),
+            new BooleanSetting("Sync Ping", false),
+            new BooleanSetting("KB Critical", true));
 
     public static ModeSetting correctionType = new ModeSetting("Correction Type", "Free","Free" ,"Focused");
 
