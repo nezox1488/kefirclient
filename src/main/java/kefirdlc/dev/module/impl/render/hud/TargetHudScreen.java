@@ -11,6 +11,7 @@ import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.util.Identifier;
 
 import java.awt.*;
+import java.lang.reflect.Method;
 
 public class TargetHudScreen extends HudElementScreen {
 
@@ -33,7 +34,10 @@ public class TargetHudScreen extends HudElementScreen {
             return 0;
         }
 
-        Identifier textureId = player.getSkinTexture();
+        Identifier textureId = resolvePlayerSkin(player);
+        if (textureId == null) {
+            return 0;
+        }
         var texture = client.getTextureManager().getTexture(textureId);
         var gpuTexture = texture.getGlTexture();
         if (gpuTexture instanceof GlTexture glTexture) {
