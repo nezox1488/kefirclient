@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "hysteria",
+  "version": "${version}",
+  "name": "hysteria",
+  "description": "этот клиент спонсировал google openAI участие принимали dickpeeck vovanpuvan chatgpt claude google ai qwen kimi grock gemeni nanobanano perpleity ",
+  "authors": [],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "icon": "assets/hysteria/icon.png",
+
+  "environment": "client",
+  "entrypoints": {
+    "main": [
+      "kefirdlc.dev.KefirDLC"
+    ]
+  },
+  "mixins": [
+    "hysteria.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}

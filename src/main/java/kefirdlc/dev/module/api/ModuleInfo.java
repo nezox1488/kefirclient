@@ -1,0 +1,14 @@
+package kefirdlc.dev.module.api;
+// coded by sitoku \\
+// since 27.04.2026 \\
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
+@Retention(RetentionPolicy.RUNTIME)
+public @interface ModuleInfo {
+    String name();
+    String desc() default "";
+    Category category();
+    boolean visual() default false;
+}

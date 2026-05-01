@@ -1,0 +1,41 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "accessWidener": "hyseria.accesswidener",
+  "package": "kefirdlc.dev.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "game.RwMixin",
+    "player.EntityMixin",
+    "player.FireworkRocketEntityMixin",
+    "player.ItemMixin",
+    "player.LivingEntityMixin",
+    "player.MixinClientConnection",
+    "player.PlayerEntityMixin"
+  ],
+  "client": [
+    "game.ClientPlayNetworkHandlerMixin",
+    "game.KeyboardMixin",
+    "game.MinecraftClientMixin",
+    "game.MouseScrollMixin",
+    "player.CameraMixin",
+    "player.ClientPlayerInteractionManagerMixin",
+    "player.EntityRendererMixin",
+    "player.GameRendererMixin",
+    "player.InputMixin",
+    "player.KeyboardInputMixin",
+    "player.LivingEntityRendererMixin",
+    "player.MixinClientPlayerEntity",
+    "player.MixinKeyboardInput",
+    "render.InGameHudMixin",
+    "render.MixinWorldRenderer",
+    "render.RenderSystemMixin",
+    "player.EntityRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  }
+}
