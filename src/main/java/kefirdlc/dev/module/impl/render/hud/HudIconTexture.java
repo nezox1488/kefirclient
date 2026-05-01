@@ -24,8 +24,8 @@ public final class HudIconTexture {
                 }
                 NativeImage image = NativeImage.read(stream);
                 NativeImageBackedTexture texture = new NativeImageBackedTexture(() -> dynamicName, image);
-                Identifier id = client.getTextureManager().registerDynamicTexture(dynamicName, texture);
-                return client.getTextureManager().getTexture(id).getGlId();
+                client.getTextureManager().registerDynamicTexture(dynamicName, texture);
+                return texture.getGlTexture();
             }
         } catch (Exception ignored) {
             return 0;
