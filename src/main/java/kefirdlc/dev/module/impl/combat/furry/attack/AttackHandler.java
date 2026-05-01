@@ -134,14 +134,14 @@ public class AttackHandler implements Wrapper {
         boolean isMaceSmash = isMace && heightDifference >= 2.0;
 
 
-        if (!isMaceSmash && !clickScheduler.isCooldownComplete(config.isUseDynamicCooldown(), ticks)) {
+        if (!isMaceSmash && !clickScheduler.isCooldownComplete(config.isUseDynamicCooldown(), ticks, config.isSyncTps(), config.isSyncPing())) {
             return false;
         }
 
 
         SimulatedPlayer simulated = SimulatedPlayer.simulateLocalPlayer(ticks);
         if (config.isOnlyCritical() && !hasMovementRestrictions(simulated)) {
-            return isPlayerInCriticalState(simulated, ticks);
+            return isPlayerInCriticalState(config, simulated, ticks);
         }
 
         return true;
@@ -158,8 +158,12 @@ public class AttackHandler implements Wrapper {
                 || simulated.player.getAbilities().flying;
     }
 
-    private boolean isPlayerInCriticalState(SimulatedPlayer simulated, int ticks) {
+    private boolean isPlayerInCriticalState(AttackPerpetrator.AttackPerpetratorConfigurable config, SimulatedPlayer simulated, int ticks) {
         boolean fall = simulated.fallDistance > 0 && (simulated.fallDistance < 0.08 || !SimulatedPlayer.simulateLocalPlayer(ticks + 1).onGround);
-        return !simulated.onGround && (fall );
+        boolean knockbackWindow = simulated.player.hurtTime > 0 && simulated.velocity.y > 0.02;
+        if (config.isKbCritical() && knockbackWindow && !simulated.onGround) {
+            return true;
+        }
+        return !simulated.onGround && fall;
     }
 }

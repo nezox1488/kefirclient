@@ -15,6 +15,7 @@ import kefirdlc.dev.module.setting.impl.BooleanSetting;
 import kefirdlc.dev.module.setting.impl.MultiBoxSetting;
 import kefirdlc.dev.module.setting.impl.NumberSetting;
 import kefirdlc.dev.util.input.KeyNameUtil;
+import kefirdlc.dev.ui.clickgui.ClickGuiScreen;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -63,7 +64,7 @@ public class Interface extends Function {
 
     @Subscribe
     public void onRender(RenderEvent event) {
-        boolean editorMode = mc.currentScreen != null;
+        boolean editorMode = isEditorMode();
         int baseAlpha = alpha.getValueInt();
         int baseBlur = blur.getValueInt();
 
@@ -99,7 +100,7 @@ public class Interface extends Function {
 
     @Subscribe
     public void onMouse(EventMouseButton event) {
-        if (mc.currentScreen == null) return;
+        if (!isEditorMode()) return;
         if (event.getButton() != GLFW.GLFW_MOUSE_BUTTON_LEFT) return;
 
         if (event.getAction() == GLFW.GLFW_PRESS) {
@@ -231,6 +232,14 @@ public class Interface extends Function {
             draggingElement.setDragging(false);
             draggingElement = null;
         }
+    }
+
+    private boolean isEditorMode() {
+        if (mc.currentScreen == null) {
+            return false;
+        }
+        ClickGuiScreen clickGui = KefirDLC.getInstance().getFunctionManager().getModule(ClickGuiScreen.class);
+        return clickGui != null && clickGui.isOpen();
     }
 
     private float animate(float current, float target, float speed) {
