@@ -33,9 +33,10 @@ public class TargetHudScreen extends HudElementScreen {
             return 0;
         }
 
-        Identifier textureId = player.getSkinTextures().texture();
+        Identifier textureId = player.getSkinTexture();
         var texture = client.getTextureManager().getTexture(textureId);
-        if (texture instanceof GlTexture glTexture) {
+        var gpuTexture = texture.getGlTexture();
+        if (gpuTexture instanceof GlTexture glTexture) {
             return glTexture.getGlId();
         }
         return 0;
