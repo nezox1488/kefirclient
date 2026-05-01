@@ -3,6 +3,8 @@ package kefirdlc.dev.module.impl.render.hud;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.texture.NativeImage;
 import net.minecraft.client.texture.NativeImageBackedTexture;
+import com.mojang.blaze3d.textures.GpuTexture;
+import net.minecraft.client.texture.GlTexture;
 import net.minecraft.util.Identifier;
 
 import java.io.InputStream;
@@ -24,9 +26,13 @@ public final class HudIconTexture {
                 }
                 NativeImage image = NativeImage.read(stream);
                 NativeImageBackedTexture texture = new NativeImageBackedTexture(() -> dynamicName, image);
-                Identifier id = new Identifier("kefir", "hud/" + dynamicName.toLowerCase());
+                Identifier id = Identifier.of("kefir", "hud/" + dynamicName.toLowerCase());
                 client.getTextureManager().registerTexture(id, texture);
-                return texture.getGlTexture();
+                GpuTexture gpuTexture = texture.getGlTexture();
+                if (gpuTexture instanceof GlTexture glTexture) {
+                    return glTexture.getGlId();
+                }
+                return 0;
             }
         } catch (Exception ignored) {
             return 0;
