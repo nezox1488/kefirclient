@@ -10,6 +10,7 @@ import kefirdlc.dev.event.impl.presss.EventPress;
 import kefirdlc.dev.module.setting.api.Setting;
 import kefirdlc.dev.ui.notification.NotificationManager;
 import kefirdlc.dev.ui.notification.NotificationType;
+import kefirdlc.dev.ui.clickgui.ClickGuiScreen;
 import kefirdlc.dev.util.wrapper.Wrapper;
 import lombok.Getter;
 import lombok.Setter;
@@ -86,6 +87,9 @@ public class Function implements Wrapper {
 
         if (binding) return;
 
+        if (e.getKey() == GLFW.GLFW_KEY_F9 && !(this instanceof ClickGuiScreen)) {
+            return;
+        }
 
         if (key == -1) return;
 
@@ -130,6 +134,7 @@ public class Function implements Wrapper {
     @Subscribe
     public void onKeyToggle(EventPress e) {
         if (binding) return;
+        if (e.getKey() == GLFW.GLFW_KEY_F9 && !(this instanceof ClickGuiScreen)) return;
 
         if (e.getAction() == GLFW.GLFW_PRESS && e.getKey() == key) {
             toggle();
