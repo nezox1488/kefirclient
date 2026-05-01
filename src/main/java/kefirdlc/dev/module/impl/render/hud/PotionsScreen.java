@@ -10,6 +10,7 @@ import java.awt.*;
 import java.util.List;
 
 public class PotionsScreen extends HudElementScreen {
+    private static final int POTIONS_ICON_TEXTURE = HudIconTexture.loadTextureId("assets/kefir/HudIcon/potions.png", "kefir_potions_icon");
 
     public record PotionLine(String text, boolean negative) {}
 
@@ -38,10 +39,10 @@ public class PotionsScreen extends HudElementScreen {
         renderer.shadow(x, y, width, height, 5, 1, 1, new Color(0, 0, 0, blurAlpha).getRGB());
         renderer.rect(x, y, width, height, 5, new Color(18, 18, 24, alpha).getRGB());
         renderer.text(FontRegistry.SF_REGULAR, x + width / 2f - 4f, y + 8.5f, 8, "Potions", Color.WHITE.getRGB(), "c");
-        float iconSize = 6f;
+        float iconSize = 8f;
         float iconX = x + width - iconSize - 6f;
-        float iconY = y + 4f;
-        renderer.rect(iconX, iconY, iconSize, iconSize, 1.5f, new Color(120, 90, 255, alpha).getRGB());
+        float iconY = y + 3f;
+        renderer.drawRgbaTexture(POTIONS_ICON_TEXTURE, iconX, iconY, iconSize, iconSize, new Color(255, 255, 255, alpha).getRGB());
         renderer.rect(x + 7, y + 11, width - 14, 2, 1f, new Color(85, 145, 255, 220).getRGB());
 
         float yOffset = y + 19;
