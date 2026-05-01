@@ -24,7 +24,8 @@ public final class HudIconTexture {
                 }
                 NativeImage image = NativeImage.read(stream);
                 NativeImageBackedTexture texture = new NativeImageBackedTexture(() -> dynamicName, image);
-                client.getTextureManager().registerDynamicTexture(dynamicName, texture);
+                Identifier id = new Identifier("kefir", "hud/" + dynamicName.toLowerCase());
+                client.getTextureManager().registerTexture(id, texture);
                 return texture.getGlTexture();
             }
         } catch (Exception ignored) {
