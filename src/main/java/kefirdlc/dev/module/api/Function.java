@@ -167,6 +167,10 @@ public class Function implements Wrapper {
         binding = false;
     }
     public void setKey(int key) {
+        if (key == GLFW.GLFW_KEY_F9 && !(this instanceof ClickGuiScreen)) {
+            this.key = -1;
+            return;
+        }
         this.key = key;
     }
 

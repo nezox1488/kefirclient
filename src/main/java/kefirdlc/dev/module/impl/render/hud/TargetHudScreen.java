@@ -4,7 +4,11 @@ package kefirdlc.dev.module.impl.render.hud;
 
 import kefirdlc.dev.util.render.core.Renderer2D;
 import kefirdlc.dev.util.render.text.FontRegistry;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.entity.EntityRenderer;
+import net.minecraft.client.texture.GlTexture;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.Identifier;
 
 import java.awt.*;
 
@@ -18,6 +22,20 @@ public class TargetHudScreen extends HudElementScreen {
 
     @Override
     public void render(Renderer2D renderer, int alpha, int blurAlpha) {
+    }
+
+    private int resolveEntityTextureId(LivingEntity target) {
+        if (target == null) return 0;
+        MinecraftClient client = MinecraftClient.getInstance();
+        if (client == null) return 0;
+
+        EntityRenderer<? super LivingEntity> renderer = client.getEntityRenderDispatcher().getRenderer(target);
+        Identifier textureId = renderer.getTexture(target);
+        var texture = client.getTextureManager().getTexture(textureId);
+        if (texture instanceof GlTexture glTexture) {
+            return glTexture.getGlId();
+        }
+        return 0;
     }
 
     public void render(Renderer2D renderer, int alpha, int blurAlpha, LivingEntity target) {
@@ -37,9 +55,14 @@ public class TargetHudScreen extends HudElementScreen {
         float headSize = 18f;
         float headX = x + 5f;
         float headY = y + 6f;
-        renderer.rect(headX, headY, headSize, headSize, 5f, new Color(45, 95, 185, 240).getRGB());
-        String avatarLetter = name.isEmpty() ? "?" : name.substring(0, 1).toUpperCase();
-        renderer.text(FontRegistry.SF_REGULAR, headX + headSize / 2f, headY + 11f, 8, avatarLetter, Color.WHITE.getRGB(), "c");
+        renderer.rect(headX, headY, headSize, headSize, 5f, new Color(35, 35, 45, 230).getRGB());
+        int entityTexture = resolveEntityTextureId(target);
+        if (entityTexture > 0) {
+            renderer.drawRgbaTexture(entityTexture, headX + 1f, headY + 1f, headSize - 2f, headSize - 2f, Color.WHITE.getRGB());
+        } else {
+            String avatarLetter = name.isEmpty() ? "?" : name.substring(0, 1).toUpperCase();
+            renderer.text(FontRegistry.SF_REGULAR, headX + headSize / 2f, headY + 11f, 8, avatarLetter, Color.WHITE.getRGB(), "c");
+        }
 
         float textX = headX + headSize + 6f;
         renderer.text(FontRegistry.SF_REGULAR, textX, y + 11, 7.5f, name, Color.WHITE.getRGB());

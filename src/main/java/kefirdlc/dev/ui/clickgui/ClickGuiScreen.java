@@ -18,7 +18,6 @@ import kefirdlc.dev.ui.clickgui.component.BindPopup;
 import kefirdlc.dev.ui.clickgui.component.EmptyScreen;
 import kefirdlc.dev.ui.clickgui.component.ModuleButton;
 import kefirdlc.dev.ui.clickgui.component.Panel;
-import kefirdlc.dev.ui.accounts.AccountManagerScreen;
 import kefirdlc.dev.ui.clickgui.elements.SettingsPopup;
 import kefirdlc.dev.ui.clickgui.elements.TextElement;
 import kefirdlc.dev.util.input.KeyNameUtil;
@@ -168,7 +167,6 @@ public class ClickGuiScreen extends Function {
 
         bindPopup.render(renderer, font, mouseX, mouseY);
         settingsPopup.render(renderer, font, mouseX, mouseY);
-        renderAccountsButton(renderer, mouseX, mouseY, (float) scaledWidth, (float) scaledHeight, guiAlpha);
     }
 
 
@@ -494,15 +492,6 @@ public class ClickGuiScreen extends Function {
 
     public void handleMouseClick(double mx, double my, int btn) {
         if (!isOpen) return;
-
-        boolean onAccounts = mx >= accountsButtonX && mx <= accountsButtonX + accountsButtonW
-                && my >= accountsButtonY && my <= accountsButtonY + accountsButtonH;
-        if (onAccounts && btn == 0) {
-            isOpen = false;
-            onDisable();
-            mc.setScreen(new AccountManagerScreen(mc.currentScreen));
-            return;
-        }
 
         if (bindPopup.isActive()) {
             bindPopup.mouseClicked(mx, my, btn);

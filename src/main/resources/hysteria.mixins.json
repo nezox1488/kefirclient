@@ -17,6 +17,7 @@
     "game.ClientPlayNetworkHandlerMixin",
     "game.KeyboardMixin",
     "game.MinecraftClientMixin",
+    "game.TitleScreenMixin",
     "game.MouseScrollMixin",
     "player.CameraMixin",
     "player.ClientPlayerInteractionManagerMixin",
