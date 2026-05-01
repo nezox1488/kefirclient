@@ -5,9 +5,9 @@ package kefirdlc.dev.module.impl.render.hud;
 import kefirdlc.dev.util.render.core.Renderer2D;
 import kefirdlc.dev.util.render.text.FontRegistry;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.texture.GlTexture;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.util.Identifier;
 
 import java.awt.*;
@@ -29,8 +29,11 @@ public class TargetHudScreen extends HudElementScreen {
         MinecraftClient client = MinecraftClient.getInstance();
         if (client == null) return 0;
 
-        EntityRenderer<? super LivingEntity> renderer = client.getEntityRenderDispatcher().getRenderer(target);
-        Identifier textureId = renderer.getTexture(target);
+        if (!(target instanceof AbstractClientPlayerEntity player)) {
+            return 0;
+        }
+
+        Identifier textureId = player.getSkinTextures().texture();
         var texture = client.getTextureManager().getTexture(textureId);
         if (texture instanceof GlTexture glTexture) {
             return glTexture.getGlId();
