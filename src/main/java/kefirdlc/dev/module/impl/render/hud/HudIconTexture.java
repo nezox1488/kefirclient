@@ -13,6 +13,16 @@ public final class HudIconTexture {
     private HudIconTexture() {
     }
 
+    private static void forceWhiteRgbPreserveAlpha(NativeImage image) {
+        for (int y = 0; y < image.getHeight(); y++) {
+            for (int x = 0; x < image.getWidth(); x++) {
+                int argb = image.getColorArgb(x, y);
+                int alpha = (argb >>> 24) & 0xFF;
+                image.setColorArgb(x, y, (alpha << 24) | 0x00FFFFFF);
+            }
+        }
+    }
+
     public static int loadTextureId(String resourcePath, String dynamicName) {
         try {
             MinecraftClient client = MinecraftClient.getInstance();
@@ -25,6 +35,7 @@ public final class HudIconTexture {
                     return 0;
                 }
                 NativeImage image = NativeImage.read(stream);
+                forceWhiteRgbPreserveAlpha(image);
                 NativeImageBackedTexture texture = new NativeImageBackedTexture(() -> dynamicName, image);
                 Identifier id = Identifier.of("kefir", "hud/" + dynamicName.toLowerCase());
                 client.getTextureManager().registerTexture(id, texture);
