@@ -46,6 +46,29 @@ public class TargetHudScreen extends HudElementScreen {
         return 0;
     }
 
+    private Identifier resolvePlayerSkin(AbstractClientPlayerEntity player) {
+        try {
+            Method getSkinTexture = player.getClass().getMethod("getSkinTexture");
+            Object result = getSkinTexture.invoke(player);
+            if (result instanceof Identifier identifier) {
+                return identifier;
+            }
+        } catch (Exception ignored) {
+        }
+
+        try {
+            Method getSkinTextures = player.getClass().getMethod("getSkinTextures");
+            Object skinTextures = getSkinTextures.invoke(player);
+            Method texture = skinTextures.getClass().getMethod("texture");
+            Object result = texture.invoke(skinTextures);
+            if (result instanceof Identifier identifier) {
+                return identifier;
+            }
+        } catch (Exception ignored) {
+        }
+        return null;
+    }
+
     public void render(Renderer2D renderer, int alpha, int blurAlpha, LivingEntity target) {
         this.width = 118;
         this.height = 30;
