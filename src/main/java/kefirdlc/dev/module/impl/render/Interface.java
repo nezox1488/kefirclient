@@ -16,6 +16,7 @@ import kefirdlc.dev.module.setting.impl.MultiBoxSetting;
 import kefirdlc.dev.module.setting.impl.NumberSetting;
 import kefirdlc.dev.util.input.KeyNameUtil;
 import kefirdlc.dev.ui.clickgui.ClickGuiScreen;
+import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -64,7 +65,8 @@ public class Interface extends Function {
 
     @Subscribe
     public void onRender(RenderEvent event) {
-        boolean editorMode = isEditorMode();
+        boolean editorMode = isChatEditorMode();
+        boolean clickGuiOpen = isClickGuiOpen();
         int baseAlpha = alpha.getValueInt();
         int baseBlur = blur.getValueInt();
 
@@ -75,20 +77,23 @@ public class Interface extends Function {
         List<String> activeBinds = getActiveBinds();
         List<PotionsScreen.PotionLine> potionLines = getPotionLines();
 
-        boolean watermarkVisible = editorMode || watermark.getValue();
-        boolean hotkeysVisible = editorMode || (hotkeys.getValue() && !activeBinds.isEmpty());
-        boolean potionsVisible = editorMode || (potions.getValue() && !potionLines.isEmpty());
-        boolean targetVisible = editorMode || (targetHud.getValue() && hudTarget != null);
+        boolean watermarkVisible = watermark.getValue();
+        boolean hotkeysVisible = editorMode || clickGuiOpen || (hotkeys.getValue() && !activeBinds.isEmpty());
+        boolean potionsVisible = editorMode || clickGuiOpen || (potions.getValue() && !potionLines.isEmpty());
+        boolean targetVisible = editorMode || clickGuiOpen || (targetHud.getValue() && hudTarget != null);
 
         watermarkAnim = animate(watermarkAnim, watermarkVisible ? 1f : 0f, 0.24f);
         hotkeysAnim = animate(hotkeysAnim, hotkeysVisible ? 1f : 0f, 0.22f);
         potionsAnim = animate(potionsAnim, potionsVisible ? 1f : 0f, 0.22f);
         targetAnim = animate(targetAnim, targetVisible ? 1f : 0f, 0.20f);
 
+        int passiveOverlayAlpha = clickGuiOpen ? Math.max(18, baseAlpha / 8) : baseAlpha;
+        int passiveOverlayBlur = clickGuiOpen ? Math.min(18, baseBlur / 8) : baseBlur;
+
         renderWatermark(event, baseAlpha, baseBlur);
-        renderTargetHud(event, baseAlpha, baseBlur, hudTarget);
-        renderHotkeys(event, baseAlpha, baseBlur, activeBinds);
-        renderPotions(event, baseAlpha, baseBlur, potionLines);
+        renderTargetHud(event, passiveOverlayAlpha, passiveOverlayBlur, hudTarget);
+        renderHotkeys(event, passiveOverlayAlpha, passiveOverlayBlur, activeBinds);
+        renderPotions(event, passiveOverlayAlpha, passiveOverlayBlur, potionLines);
 
         if (editorMode) {
             handleDragTick();
@@ -100,7 +105,7 @@ public class Interface extends Function {
 
     @Subscribe
     public void onMouse(EventMouseButton event) {
-        if (!isEditorMode()) return;
+        if (!isChatEditorMode()) return;
         if (event.getButton() != GLFW.GLFW_MOUSE_BUTTON_LEFT) return;
 
         if (event.getAction() == GLFW.GLFW_PRESS) {
@@ -234,10 +239,11 @@ public class Interface extends Function {
         }
     }
 
-    private boolean isEditorMode() {
-        if (mc.currentScreen == null) {
-            return false;
-        }
+    private boolean isChatEditorMode() {
+        return mc.currentScreen instanceof ChatScreen;
+    }
+
+    private boolean isClickGuiOpen() {
         ClickGuiScreen clickGui = KefirDLC.getInstance().getFunctionManager().getModule(ClickGuiScreen.class);
         return clickGui != null && clickGui.isOpen();
     }
