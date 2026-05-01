@@ -138,6 +138,10 @@ public class AttackHandler implements Wrapper {
             return false;
         }
 
+        // Anti double-click burst while in knockback-critical window.
+        if (config.isKbCritical() && clickScheduler.lastClickPassed() < 110L) {
+            return false;
+        }
 
         SimulatedPlayer simulated = SimulatedPlayer.simulateLocalPlayer(ticks);
         if (config.isOnlyCritical() && !hasMovementRestrictions(simulated)) {
