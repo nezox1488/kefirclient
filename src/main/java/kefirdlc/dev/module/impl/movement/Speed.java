@@ -12,7 +12,6 @@ import kefirdlc.dev.module.setting.impl.ModeSetting;
 import kefirdlc.dev.module.setting.impl.NumberSetting;
 import kefirdlc.dev.util.Player.MobilityHandler;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 
@@ -76,22 +75,24 @@ public class Speed extends Function {
 
         mc.player.jumpingCooldown = 0;
 
-        if (mc.player.isOnGround() && hasLowCeiling(mc.player)) {
+        double miniJump = miniJumpVelocity.getValue();
+
+        // Replace the vanilla jump arc with a forced mini-hop.
+        if (mc.player.getVelocity().y > miniJump) {
             Vec3d velocity = mc.player.getVelocity();
-            mc.player.setVelocity(velocity.x, miniJumpVelocity.getValue(), velocity.z);
+            mc.player.setVelocity(velocity.x, miniJump, velocity.z);
         }
 
-        if (mc.player.getVelocity().y > 0.0 && hasLowCeiling(mc.player)) {
+        if (mc.player.isOnGround()) {
+            Vec3d velocity = mc.player.getVelocity();
+            mc.player.setVelocity(velocity.x, miniJump, velocity.z);
+        }
+
+        // Apply horizontal acceleration while ascending from mini-hop.
+        if (mc.player.getVelocity().y > 0.0) {
             Vec3d velocity = mc.player.getVelocity();
             double multiplier = headBoost.getValue();
             mc.player.setVelocity(velocity.x * multiplier, velocity.y, velocity.z * multiplier);
         }
-    }
-
-    private boolean hasLowCeiling(net.minecraft.client.network.ClientPlayerEntity player) {
-        BlockPos pos = player.getBlockPos();
-        boolean fullBlockCeiling = !mc.world.getBlockState(pos.up(2)).getCollisionShape(mc.world, pos.up(2)).isEmpty();
-        boolean trapdoorCeiling = !mc.world.getBlockState(pos.up(1)).getCollisionShape(mc.world, pos.up(1)).isEmpty();
-        return fullBlockCeiling || trapdoorCeiling;
     }
 }
