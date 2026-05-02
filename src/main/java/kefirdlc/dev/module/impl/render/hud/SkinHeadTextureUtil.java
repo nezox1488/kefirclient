@@ -4,7 +4,6 @@ import com.mojang.blaze3d.textures.GpuTexture;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.client.texture.GlTexture;
-import net.minecraft.client.texture.MissingSprite;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
 
@@ -34,9 +33,6 @@ public final class SkinHeadTextureUtil {
             return glTexture.getGlId();
         }
 
-        if (texture == MissingSprite.getMissingSpriteTexture()) {
-            return 0;
-        }
         return 0;
     }
 
