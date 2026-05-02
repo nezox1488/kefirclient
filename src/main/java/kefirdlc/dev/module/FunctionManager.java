@@ -9,6 +9,7 @@ import kefirdlc.dev.module.impl.misc.DebugPanelModule;
 import kefirdlc.dev.module.impl.misc.NameProtect;
 import kefirdlc.dev.module.impl.movement.AutoSprint;
 import kefirdlc.dev.module.impl.movement.GuiMove;
+import kefirdlc.dev.module.impl.movement.HighJump;
 import kefirdlc.dev.module.impl.movement.NoDelay;
 import kefirdlc.dev.module.impl.movement.Speed;
 import kefirdlc.dev.module.impl.render.Interface;
@@ -37,6 +38,7 @@ public class FunctionManager {
                 new DebugPanelModule(),
                 new NoDelay(),
                 new Speed(),
+                new HighJump(),
                 new NotificationModule(),
                 new AttackAura(),
                 new GuiMove(),
