@@ -5,11 +5,15 @@ package kefirdlc.dev.module.impl.render.hud;
 
 import kefirdlc.dev.util.render.core.Renderer2D;
 import kefirdlc.dev.util.render.text.FontRegistry;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.util.Identifier;
 
 import java.awt.*;
 import java.util.List;
 
 public class HotkeysScreen extends HudElementScreen {
+
+    private static final Identifier HOTKEYS_ICON = Identifier.of("kefir", "HudIcon/hotkeys.png");
 
     public HotkeysScreen() {
         super(8, 75, 86, 16);
@@ -34,10 +38,11 @@ public class HotkeysScreen extends HudElementScreen {
         renderer.shadow(x, y, width, height, 5, 1, 1, new Color(0, 0, 0, blurAlpha).getRGB());
         renderer.rect(x, y, width, height, 5, new Color(18, 18, 24, alpha).getRGB());
         renderer.text(FontRegistry.SF_REGULAR, x + 5, y + 8f, 8, "Hotkeys", Color.WHITE.getRGB());
-        float iconSize = 6f;
-        float iconX = x + width - iconSize - 4f;
+        float iconSize = 8f;
+        float iconX = x - iconSize - 4f;
         float iconY = y + 4f;
-        renderer.rect(iconX, iconY, iconSize, iconSize, 1.5f, new Color(70, 120, 255, alpha).getRGB());
+        int textureId = MinecraftClient.getInstance().getTextureManager().getTexture(HOTKEYS_ICON).getGlTexture();
+        renderer.drawRgbaTexture(textureId, iconX, iconY, iconSize, iconSize, new Color(255, 255, 255, alpha).getRGB());
 
         float yOffset = y + 14.5f;
         for (String bindText : activeBinds) {
