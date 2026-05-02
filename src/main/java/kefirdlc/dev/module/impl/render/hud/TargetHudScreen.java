@@ -4,14 +4,10 @@ package kefirdlc.dev.module.impl.render.hud;
 
 import kefirdlc.dev.util.render.core.Renderer2D;
 import kefirdlc.dev.util.render.text.FontRegistry;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.texture.GlTexture;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.client.network.AbstractClientPlayerEntity;
-import net.minecraft.util.Identifier;
+import net.minecraft.entity.player.PlayerEntity;
 
 import java.awt.*;
-import java.lang.reflect.Method;
 
 public class TargetHudScreen extends HudElementScreen {
 
@@ -26,47 +22,10 @@ public class TargetHudScreen extends HudElementScreen {
     }
 
     private int resolveEntityTextureId(LivingEntity target) {
-        if (target == null) return 0;
-        MinecraftClient client = MinecraftClient.getInstance();
-        if (client == null) return 0;
-
-        if (!(target instanceof AbstractClientPlayerEntity player)) {
+        if (!(target instanceof PlayerEntity player)) {
             return 0;
         }
-
-        Identifier textureId = resolvePlayerSkin(player);
-        if (textureId == null) {
-            return 0;
-        }
-        var texture = client.getTextureManager().getTexture(textureId);
-        var gpuTexture = texture.getGlTexture();
-        if (gpuTexture instanceof GlTexture glTexture) {
-            return glTexture.getGlId();
-        }
-        return 0;
-    }
-
-    private Identifier resolvePlayerSkin(AbstractClientPlayerEntity player) {
-        try {
-            Method getSkinTexture = player.getClass().getMethod("getSkinTexture");
-            Object result = getSkinTexture.invoke(player);
-            if (result instanceof Identifier identifier) {
-                return identifier;
-            }
-        } catch (Exception ignored) {
-        }
-
-        try {
-            Method getSkinTextures = player.getClass().getMethod("getSkinTextures");
-            Object skinTextures = getSkinTextures.invoke(player);
-            Method texture = skinTextures.getClass().getMethod("texture");
-            Object result = texture.invoke(skinTextures);
-            if (result instanceof Identifier identifier) {
-                return identifier;
-            }
-        } catch (Exception ignored) {
-        }
-        return null;
+        return SkinHeadTextureUtil.resolveSkinTextureId(player);
     }
 
     public void render(Renderer2D renderer, int alpha, int blurAlpha, LivingEntity target) {
