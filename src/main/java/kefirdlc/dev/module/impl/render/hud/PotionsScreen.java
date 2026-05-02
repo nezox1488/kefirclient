@@ -6,6 +6,7 @@ package kefirdlc.dev.module.impl.render.hud;
 import kefirdlc.dev.util.render.core.Renderer2D;
 import kefirdlc.dev.util.render.text.FontRegistry;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.texture.GlTexture;
 import net.minecraft.util.Identifier;
 
 import java.awt.*;
@@ -45,8 +46,9 @@ public class PotionsScreen extends HudElementScreen {
         float iconSize = 8f;
         float iconX = x - iconSize - 4f;
         float iconY = y + 4f;
-        int textureId = MinecraftClient.getInstance().getTextureManager().getTexture(POTIONS_ICON).getGlTexture();
-        renderer.drawRgbaTexture(textureId, iconX, iconY, iconSize, iconSize, new Color(255, 255, 255, alpha).getRGB());
+        if (MinecraftClient.getInstance().getTextureManager().getTexture(POTIONS_ICON).getGlTexture() instanceof GlTexture glTexture) {
+            renderer.drawRgbaTexture(glTexture.getGlId(), iconX, iconY, iconSize, iconSize, new Color(255, 255, 255, alpha).getRGB());
+        }
         renderer.rect(x + 7, y + 11, width - 14, 2, 1f, new Color(85, 145, 255, 220).getRGB());
 
         float yOffset = y + 19;
